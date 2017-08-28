@@ -77,6 +77,13 @@ def print_board(board):
         print()
 
 
+"""
+Count the number of alive cells in the board.
+"""
+def alive_cell_count(board):
+    return sum(sum(row) for row in board)
+
+
 @pytest.mark.parametrize(
         "neighbour_count, expected_state",
         (
@@ -218,5 +225,29 @@ def test_create_random_board(width, height, alive_count):
     assert len(board) == height
     for row in board:
         assert len(row) == width
-    assert sum(sum(row) for row in board) == alive_count
+    assert alive_cell_count(board) == alive_count
     print_board(board)
+
+@pytest.mark.parametrize(
+        "board, expected_alive_count",
+        (
+            (
+                [[DEAD]*10 for _ in range(10)],
+                0
+            ),
+            (
+                [[ALIVE]*10 for _ in range(10)],
+                100
+            ),
+            (
+                [
+                    [DEAD, DEAD, ALIVE],
+                    [ALIVE, DEAD, DEAD],
+                    [DEAD, ALIVE, DEAD]
+                ],
+                3
+            )
+        )
+    )
+def test_alive_cell_count(board, expected_alive_count):
+    assert alive_cell_count(board) == expected_alive_count
