@@ -1,4 +1,5 @@
 import pytest
+import random
 
 DEAD = 0
 ALIVE = 1
@@ -50,6 +51,30 @@ def create_next_board(board):
             next_board[x][y] = next_cell_state(board, x, y)
 
     return next_board
+
+
+"""
+Create a random board if given width and height and fill it with a given amount of alive cells.
+"""
+def create_random_board(width, height, alive_count):
+    board = [[DEAD]*width for _ in range(height)]
+
+    while alive_count > 0:
+        x = random.randint(0, height-1)
+        y = random.randint(0, width-1)
+        if board[x][y] == DEAD:
+            board[x][y] = ALIVE
+            alive_count -= 1
+    return board
+
+"""
+Print a board to stdout.
+"""
+def print_board(board):
+    for row in board:
+        for cell in row:
+            print('#' if cell == ALIVE else ' ', end='')
+        print()
 
 
 @pytest.mark.parametrize(
@@ -176,3 +201,22 @@ def test_next_cell_state(board, x, y, expected_state):
 def test_create_next_board(board, expected_next_board):
     assert create_next_board(board) == expected_next_board
 
+
+@pytest.mark.parametrize(
+        "width, height, alive_count",
+        (
+            (80, 40, 10),
+            (80, 40, 20),
+            (80, 40, 40),
+            (40, 80, 10),
+            (40, 80, 30),
+            (40, 80, 80),
+        )
+    )
+def test_create_random_board(width, height, alive_count):
+    board = create_random_board(width, height, alive_count)
+    assert len(board) == height
+    for row in board:
+        assert len(row) == width
+    assert sum(sum(row) for row in board) == alive_count
+    print_board(board)
