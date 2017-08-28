@@ -39,6 +39,19 @@ def next_cell_state(board, x, y):
     return next_state(count_alive_neighbours(get_neighbors(board, x, y)))
 
 
+"""
+Based on the given board create the board for the next round.
+"""
+def create_next_board(board):
+    next_board = [[DEAD]*len(row) for row in board]
+
+    for x in range(len(board)):
+        for y in range(len(board[x])):
+            next_board[x][y] = next_cell_state(board, x, y)
+
+    return next_board
+
+
 @pytest.mark.parametrize(
         "neighbour_count, expected_state",
         (
@@ -136,3 +149,30 @@ def test_get_neighbors(board, x, y, expected_neighbours):
     )
 def test_next_cell_state(board, x, y, expected_state):
     assert next_cell_state(board, x, y) == expected_state
+
+
+@pytest.mark.parametrize(
+        "board, expected_next_board",
+        (
+            ([[DEAD]*10 for _ in range(15)],
+             [[DEAD]*10 for _ in range(15)]),
+            ([
+                 [DEAD, DEAD, DEAD, DEAD, DEAD],
+                 [DEAD, DEAD, ALIVE, DEAD, DEAD],
+                 [DEAD, DEAD, ALIVE, DEAD, DEAD],
+                 [DEAD, DEAD, ALIVE, DEAD, DEAD],
+                 [DEAD, DEAD, DEAD, DEAD, DEAD]
+             ],
+             [
+                 [DEAD, DEAD, DEAD, DEAD, DEAD],
+                 [DEAD, ALIVE, DEAD, ALIVE, DEAD],
+                 [DEAD, ALIVE, ALIVE, ALIVE, DEAD],
+                 [DEAD, ALIVE, DEAD, ALIVE, DEAD],
+                 [DEAD, DEAD, DEAD, DEAD, DEAD]
+             ]),
+
+        )
+)
+def test_create_next_board(board, expected_next_board):
+    assert create_next_board(board) == expected_next_board
+
