@@ -73,9 +73,21 @@ def create_random_board(width, height, alive_count):
 Print a board to stdout.
 """
 def print_board(board):
-    for row in board:
-        for cell in row:
-            print('#' if cell == ALIVE else ' ', end='')
+    chars = {
+                (0, 0): ' ',
+                (1, 0): '\u2580',
+                (0, 1): '\u2585',
+                (1, 1): '\u2588',
+                0: ' ',
+                1: '\u2580'
+            }
+    for y in range(0, len(board), 2):
+        if len(board) < y+2:
+            rows = board[y]
+        else:
+            rows = zip(board[y], board[y+1])
+        for cell_pair in rows:
+            print(chars[cell_pair], end='')
         print()
 
 
