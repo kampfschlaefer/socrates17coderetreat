@@ -26,6 +26,13 @@ def get_neighbors(board, x, y):
     return neighbours
 
 
+"""
+Determine whether the cell at (x, y) is alive.
+"""
+def is_cell_alive(board, x, y):
+    return is_alive(get_neighbors(board, x, y))
+
+
 @pytest.mark.parametrize(
         "neighbour_count, expected_alive",
         (
@@ -93,3 +100,33 @@ neighbour_test_board = [
     )
 def test_get_neighbors(board, x, y, expected_neighbours):
     assert get_neighbors(board, x, y) == expected_neighbours
+
+
+@pytest.mark.parametrize(
+        "board, x, y, expected_alive",
+        (
+            ([[DEAD]*3 for _ in range(3)],
+             1, 1,
+             False),
+            ([[ALIVE]*3 for _ in range(3)],
+             1, 1,
+             False),
+            ([[DEAD, DEAD, DEAD],
+              [DEAD, ALIVE, DEAD],
+              [DEAD, DEAD, ALIVE]],
+             1, 1,
+             False),
+            ([[DEAD, DEAD, DEAD],
+              [DEAD, ALIVE, ALIVE],
+              [DEAD, DEAD, ALIVE]],
+             1, 1,
+             False),
+            ([[DEAD, DEAD, DEAD],
+              [DEAD, DEAD, ALIVE],
+              [DEAD, DEAD, ALIVE]],
+             1, 1,
+             False),
+        )
+    )
+def test_is_cell_alive(board, x, y, expected_alive):
+    assert is_cell_alive(board, x, y) == expected_alive
