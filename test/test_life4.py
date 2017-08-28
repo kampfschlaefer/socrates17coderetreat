@@ -76,7 +76,7 @@ def print_board(board):
     chars = {
                 (0, 0): ' ',
                 (1, 0): '\u2580',
-                (0, 1): '\u2585',
+                (0, 1): '\u2584',
                 (1, 1): '\u2588',
                 0: ' ',
                 1: '\u2580'
@@ -107,9 +107,9 @@ def play(width, height, fill_rate):
     print_board(board)
     while alive_cell_count(board) > 0:
         board = create_next_board(board)
+        print(chr(27) + "[2J")
         print_board(board)
-        print()
-        time.sleep(1)
+        time.sleep(.1)
 
 
 @pytest.mark.parametrize(
