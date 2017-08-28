@@ -11,6 +11,9 @@ def next_state(alive_neighbour_count):
     return ALIVE if alive_neighbour_count in [2, 3] else DEAD
 
 
+"""
+Return the number of neighbours that are alive.
+"""
 def count_alive_neighbours(neighbours):
     return sum(neighbours)
 
@@ -33,7 +36,7 @@ def get_neighbors(board, x, y):
 Determine the next state of the cell at (x, y).
 """
 def next_cell_state(board, x, y):
-    return next_state(get_neighbors(board, x, y))
+    return next_state(count_alive_neighbours(get_neighbors(board, x, y)))
 
 
 @pytest.mark.parametrize(
@@ -123,12 +126,12 @@ def test_get_neighbors(board, x, y, expected_neighbours):
               [DEAD, ALIVE, ALIVE],
               [DEAD, DEAD, ALIVE]],
              1, 1,
-             DEAD),
+             ALIVE),
             ([[DEAD, DEAD, DEAD],
               [DEAD, DEAD, ALIVE],
               [DEAD, DEAD, ALIVE]],
              1, 1,
-             DEAD),
+             ALIVE),
         )
     )
 def test_next_cell_state(board, x, y, expected_state):
