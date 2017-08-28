@@ -1,5 +1,7 @@
 import pytest
 import random
+import time
+import sys
 
 DEAD = 0
 ALIVE = 1
@@ -82,6 +84,20 @@ Count the number of alive cells in the board.
 """
 def alive_cell_count(board):
     return sum(sum(row) for row in board)
+
+
+"""
+Play a game of life.
+"""
+def play(width, height, fill_rate):
+    alive_count = fill_rate * width * height
+    board = create_random_board(width, height, alive_count)
+    print_board(board)
+    while alive_cell_count(board) > 0:
+        board = create_next_board(board)
+        print_board(board)
+        print()
+        time.sleep(1)
 
 
 @pytest.mark.parametrize(
@@ -246,8 +262,18 @@ def test_create_random_board(width, height, alive_count):
                     [DEAD, ALIVE, DEAD]
                 ],
                 3
-            )
+            ),
         )
     )
 def test_alive_cell_count(board, expected_alive_count):
     assert alive_cell_count(board) == expected_alive_count
+
+
+
+if __name__ == "__main__":
+    assert len(sys.argv) == 4
+    width = int(sys.argv[1])
+    height = int(sys.argv[2])
+    fill_rate = float(sys.argv[3])
+
+    play(width, height, fill_rate)
