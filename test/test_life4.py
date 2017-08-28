@@ -4,8 +4,11 @@ DEAD = 0
 ALIVE = 1
 
 
-def is_alive(neighbour_count):
-    return neighbour_count in [2, 3]
+"""
+Return the next state of a cell if it would have the given count of alive neighbours.
+"""
+def next_state(alive_neighbour_count):
+    return ALIVE if alive_neighbour_count in [2, 3] else DEAD
 
 
 def count_alive_neighbours(neighbours):
@@ -27,28 +30,28 @@ def get_neighbors(board, x, y):
 
 
 """
-Determine whether the cell at (x, y) is alive.
+Determine the next state of the cell at (x, y).
 """
-def is_cell_alive(board, x, y):
-    return is_alive(get_neighbors(board, x, y))
+def next_cell_state(board, x, y):
+    return next_state(get_neighbors(board, x, y))
 
 
 @pytest.mark.parametrize(
-        "neighbour_count, expected_alive",
+        "neighbour_count, expected_state",
         (
-            (0, False),
-            (1, False),
-            (2, True),
-            (3, True),
-            (4, False),
-            (5, False),
-            (6, False),
-            (7, False),
-            (8, False),
+            (0, DEAD),
+            (1, DEAD),
+            (2, ALIVE),
+            (3, ALIVE),
+            (4, DEAD),
+            (5, DEAD),
+            (6, DEAD),
+            (7, DEAD),
+            (8, DEAD),
         )
 )
-def test_is_alive(neighbour_count, expected_alive):
-    assert is_alive(neighbour_count) == expected_alive
+def test_next_state(neighbour_count, expected_state):
+    assert next_state(neighbour_count) == expected_state
 
 
 @pytest.mark.parametrize(
@@ -103,30 +106,30 @@ def test_get_neighbors(board, x, y, expected_neighbours):
 
 
 @pytest.mark.parametrize(
-        "board, x, y, expected_alive",
+        "board, x, y, expected_state",
         (
             ([[DEAD]*3 for _ in range(3)],
              1, 1,
-             False),
+             DEAD),
             ([[ALIVE]*3 for _ in range(3)],
              1, 1,
-             False),
+             DEAD),
             ([[DEAD, DEAD, DEAD],
               [DEAD, ALIVE, DEAD],
               [DEAD, DEAD, ALIVE]],
              1, 1,
-             False),
+             DEAD),
             ([[DEAD, DEAD, DEAD],
               [DEAD, ALIVE, ALIVE],
               [DEAD, DEAD, ALIVE]],
              1, 1,
-             False),
+             DEAD),
             ([[DEAD, DEAD, DEAD],
               [DEAD, DEAD, ALIVE],
               [DEAD, DEAD, ALIVE]],
              1, 1,
-             False),
+             DEAD),
         )
     )
-def test_is_cell_alive(board, x, y, expected_alive):
-    assert is_cell_alive(board, x, y) == expected_alive
+def test_next_cell_state(board, x, y, expected_state):
+    assert next_cell_state(board, x, y) == expected_state
